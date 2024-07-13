@@ -4,6 +4,8 @@ For the scripts to work, the address library offsets must be in the database, if
 
 ### Changelog
 
+To use it now is necessary to extract data.7z on the root folder, i do not what to add that many files to the source control
+
 Now it is blazing fast, however it reqquires you to extract a zip file with 3.265.867 tiny files
 
 The hook all references to that address were removed, i don't think that should be done.
