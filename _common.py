@@ -157,12 +157,12 @@ class AddressLibrary:
         mid = GetMatchID(self.game_version, oid)
         if(self.game_version == "ae"):
             print("__ ADDRESS AND OFFSET __")
-            print("SE ID: "+ GetPrettyNull(mid))
+            print("SE ID: "+ GetPrettyNull(mid)+ " SE Offset: " + GetPrettyNull("-1"))
             print("AE ID: "+ oid + " AE Offset: "+hex(offset).rstrip('L'))
         else:
             print("__ ADDRESS AND OFFSET __")
             print("SE ID: "+ oid + " SE Offset: "+hex(offset).rstrip('L'))
-            print("AE ID: "+ GetPrettyNull(mid))
+            print("AE ID: "+ GetPrettyNull(mid)+ " AE Offset: " + GetPrettyNull("-1"))
 
     def GetGameVersion(self):
         return self.game_version.upper()
