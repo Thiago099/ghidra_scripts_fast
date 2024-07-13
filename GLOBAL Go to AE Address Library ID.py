@@ -19,7 +19,7 @@ class MyScript(GhidraScript):
 
 
 		id = askInt(scriptName, "Please enter an address library id:")
-		isEqual = askYesNo(scriptName, "Is this address for the " + library.getGameVersion() + " version of skyrim?")
+		isEqual = library.getGameVersion() == "ae"
 
 		if(isEqual):
 			address = library.GetMemory(id)
@@ -29,9 +29,10 @@ class MyScript(GhidraScript):
 				print("Your id was not found in the version match, you will need to find it manually")
 				return
 			address = library.GetMemory(matchId)
-
-		createBookmark(currentProgram.getAddressFactory().getAddress(address), "Addresses", "Description")
-
+			
+		address = currentProgram.getAddressFactory().getAddress(address)
+		
+		goTo(address)
 
 script = MyScript()
 script.run()
