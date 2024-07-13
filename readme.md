@@ -6,6 +6,8 @@ For the scripts to work, the address library offsets must be in the database, if
 
 To use it now is necessary to extract data.7z on the root folder, i do not what to add that many files to the source control
 
+![image](https://github.com/user-attachments/assets/04dbad35-e940-4c84-a0e9-88091175ad31)
+
 Now it is blazing fast, however it reqquires you to extract a zip file with 3.265.867 tiny files
 
 The hook all references to that address were removed, i don't think that should be done.
@@ -87,5 +89,7 @@ After you do that, you can rename and put the file you generated (it will be on 
 it needs to follow this naming convetion
 
 offsets-`<ae-or-se>`-`<full-game-version>`.txt
+
+You should delete all other text files that follow this pattern, as the ipynb file will generate the dataset for all versions and that takes a bit of time
 
 Finally, you can run the first cell on the ipynb file to update the database used by these scripts
