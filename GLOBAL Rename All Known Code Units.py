@@ -25,13 +25,7 @@ class MyScript(GhidraScript):
 
         delete_existing_symbols = askYesNo(scriptName, "Do you want to delete existing symbols from the renamed functions?")
         code_units_renamed = 0
-        i = 0
-        allIds = library.GetAllIds()
-        for id in allIds:
-
-            if(i%1000 == 0):
-                print(str(i) + "/" + str(len(allIds)))
-            i += 1
+        for id in library.GetAllIds():
 
             address = library.GetMemory(id)
             if(address == "-1"):
@@ -55,8 +49,6 @@ class MyScript(GhidraScript):
 
             else:
                 print("code unit not found at address "+address)
-
-            pass
         print("Done, code units renamed "+str(code_units_renamed))
 
 script = MyScript()
