@@ -47,13 +47,6 @@ Example of output
 
 ![image](https://github.com/Thiago099/ghidra_scripts/assets/66787043/367148a6-fd27-4cde-81c6-043f54ceb682)
 
-### SELECTION Hook All References to this address.py
-
-This script will print on the console the address library IDs of the function it is in, and the offset, for all references to the selected address. If the selected address is a reference, it will do that for the original address instead
-
-![image](https://github.com/Thiago099/ghidra_scripts/assets/66787043/3af400a3-889c-42b6-b511-282b6352811d)
-
-
 ### SELECTION Hook This Reference.py
 
 If the selected address is in a function, it will display the id of this function on the Address Library and the offset of where this address is in that function
