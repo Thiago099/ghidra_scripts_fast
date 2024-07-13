@@ -1,6 +1,18 @@
 ### General
 For the scripts to work, the address library offsets must be in the database, if you are not using 1.6.1170.0 or 1.5.97.0 you will need to add them to the database [Here](#adding-your-skyrim-version-to-the-database) is how you do it 
 
+
+### Changelog
+
+Now it is blazing fast, however it reqquires you to extract a zip file with 3.265.867 tiny files
+
+The hook all references to that address were removed, i don't think that should be done.
+
+The hook this reference now gives the offset for the other version of skyrim, it is a heuristic, but is a pretty good heuristic
+
+![image](https://github.com/user-attachments/assets/b9689912-0b59-40b5-bc00-47ecd4f08b37)
+
+
 ### GLOBAL Rename All Known Functions.py
 
 This script will rename all known functions that are in the definition database
@@ -46,7 +58,7 @@ This script will print on the console the address library IDs of the function it
 
 If the selected address is in a function, it will display the id of this function on the Address Library and the offset of where this address is in that function
 
-![image](https://github.com/Thiago099/ghidra_scripts/assets/66787043/a5a5a13e-7d6b-4e56-aa40-9045cf934a65)
+![image](https://github.com/user-attachments/assets/1b621c33-3f53-4175-84cd-c475cd680efc)
 
 ### Adding your skyrim version to the database:
 
