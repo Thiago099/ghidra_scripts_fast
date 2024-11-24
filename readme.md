@@ -92,4 +92,4 @@ offsets-`<ae-or-se>`-`<full-game-version>`.txt
 
 You should delete all other text files that follow this pattern, as the ipynb file will generate the dataset for all versions and that takes a bit of time
 
-Finally, you can run the first cell on the ipynb file to update the database used by these scripts
+Finally, you can run all the cells of the ipynb file to update the database used by these scripts, the generated files must go on the data folder
