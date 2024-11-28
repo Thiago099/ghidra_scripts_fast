@@ -38,28 +38,41 @@ class MyScript(GhidraScript):
 		if(not library.IsValid()):
 			return
 		
-		func = getFunctionContaining(currentAddress)
 
-		if func is not None:
-			entryPoint = func.getEntryPoint()
-			offset = currentAddress.subtract(entryPoint)
+		refs = currentProgram.referenceManager.getReferencesTo(currentAddress)
 
+		if not refs.hasNext():
 			instruction = getInstructionAt(currentAddress)
-			ref = instruction.getOperandReferences(0)
+			ref_address = instruction.getOperandReferences(0)[0].getToAddress()
+			refs = currentProgram.referenceManager.getReferencesTo(ref_address)
 
-			if(len(ref) > 0):
-				ref_address = ref[0].getToAddress()
+		for ref in refs:
 
-				ref_offset = currentAddress.subtract(entryPoint)
+			address = ref.getFromAddress()
 
-				index = GetFunctionCallOffsets(func, ref_address, ref_offset)
+			func = getFunctionContaining(address)
 
-				library.TryPrintAddressExt(entryPoint, ref_address, ref_offset, index)
+
+			if func is not None:
+				entryPoint = func.getEntryPoint()
+				offset = address.subtract(entryPoint)
+
+				instruction = getInstructionAt(address)
+				ref = instruction.getOperandReferences(0)
+
+				if(len(ref) > 0):
+					ref_address = ref[0].getToAddress()
+
+					ref_offset = address.subtract(entryPoint)
+
+					index = GetFunctionCallOffsets(func, ref_address, ref_offset)
+
+					library.TryPrintAddressExt(entryPoint, ref_address, ref_offset, index)
+				else:
+					library.PrintAddress(entryPoint, offset)
+
 			else:
-				library.PrintAddress(entryPoint, offset)
-
-		else:
-			print("address " + str(currentAddress) + " is not on a function")
+				print("address " + str(address) + " is not on a function")
 
 
 script = MyScript()
