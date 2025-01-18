@@ -94,7 +94,7 @@ def GetAllIds(game_version):
 
 def GetPrettyNull(input):
     if(input == "-1"):
-        return "Not Found"
+        return "0"
     return input
 class AddressLibrary:
     def __init__(self, currentProgram):
@@ -150,6 +150,19 @@ class AddressLibrary:
             print("__ ADDRESS AND OFFSET __")
             print("SE ID: "+ fid + " SE Offset: " + hex(ref_offset).rstrip('L'))
             print("AE ID: "+ GetPrettyNull(ofid) + " AE Offset: "+GetPrettyNull(ooffset) + " (Heuristic)")
+        
+        if(self.game_version == "ae"):
+            print(
+                "SKSE::AllocTrampoline(14);\n"+
+                "auto& trampoline = SKSE::GetTrampoline();\n" + 
+                "originalFunction = trampoline.write_call<5>(REL::RelocationID("+ GetPrettyNull(ofid)+", "+ fid +").address() + REL::Relocate("+GetPrettyNull(ooffset)+", "+hex(ref_offset).rstrip('L')+"), thunk);"
+            )
+        else:
+            print(
+                "SKSE::AllocTrampoline(14);\n"+
+                "auto& trampoline = SKSE::GetTrampoline();\n" + 
+                "originalFunction = trampoline.write_call<5>(REL::RelocationID("+ fid+", "+ GetPrettyNull(ofid) +").address() + REL::Relocate("+hex(ref_offset).rstrip('L')+", "+GetPrettyNull(ooffset)+"), thunk);"
+            )
 
 
     def PrintAddress(self, entryPoint, offset):
@@ -163,6 +176,10 @@ class AddressLibrary:
             print("__ ADDRESS AND OFFSET __")
             print("SE ID: "+ oid + " SE Offset: "+hex(offset).rstrip('L'))
             print("AE ID: "+ GetPrettyNull(mid)+ " AE Offset: " + GetPrettyNull("-1"))
+        if(self.game_version == "ae"):
+            print("builder->AddCall<ClassName, 5, 14>("+ GetPrettyNull(mid)+ ", " + GetPrettyNull("-1")+", "+ oid + ", "+hex(offset).rstrip('L')+");")
+        else:
+            print("builder->AddCall<ClassName, 5, 14>("+ oid + ", "+hex(offset).rstrip('L')+", "+ GetPrettyNull(mid)+ ", " + GetPrettyNull("-1")+");")
 
     def GetGameVersion(self):
         return self.game_version.upper()
