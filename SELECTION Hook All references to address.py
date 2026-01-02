@@ -8,7 +8,7 @@ from ghidra.app.script import GhidraScript
 from ghidra.util.task import ConsoleTaskMonitor
 from ghidra.program.model.symbol import ReferenceManager
 
-from  _common import AddressLibrary
+from  _common import AddressLibrary, ParseInstruction
 scriptName = "Hook  this function"
 
 def GetFunctionCallOffsets(func,ref_address, ref_offset):
@@ -60,6 +60,9 @@ class MyScript(GhidraScript):
 				instruction = getInstructionAt(address)
 				ref = instruction.getOperandReferences(0)
 
+				(kind, size) = ParseInstruction(instruction)
+
+
 				if(len(ref) > 0):
 					ref_address = ref[0].getToAddress()
 
@@ -67,7 +70,7 @@ class MyScript(GhidraScript):
 
 					index = GetFunctionCallOffsets(func, ref_address, ref_offset)
 
-					library.TryPrintAddressExt(entryPoint, ref_address, ref_offset, index)
+					library.TryPrintAddressExt(entryPoint, ref_address, ref_offset, index, kind, size)
 				else:
 					library.PrintAddress(entryPoint, offset)
 

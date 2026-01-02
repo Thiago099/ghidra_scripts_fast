@@ -27,6 +27,22 @@ def MemoryToAddressLibrary(version, input):
         return "-1"
     return output
 
+def ParseInstruction(instruction):
+    kind = "other"
+    size = 5
+    if instruction:
+        mnemonic = instruction.getMnemonicString().upper()
+        size = instruction.getLength()
+        
+        if mnemonic.startswith("CALL"):
+            kind = "call"
+        elif mnemonic.startswith("JMP"):
+            kind = "jump"
+        else:
+            kind = "other"
+
+    return (kind, size)
+
 def MemoryToAddressLibrarySilent(version, input):
     input = "0x"+str(input)[2:].lstrip('0')
     output = load_item("offsets", version, "skyrim-to-address", input)
@@ -134,7 +150,7 @@ class AddressLibrary:
         return GetAddressData(self.game_version, self.version, id)
     
 
-    def TryPrintAddressExt(self, entryPoint, ref_address, ref_offset, index):
+    def TryPrintAddressExt(self, entryPoint, ref_address, ref_offset, index, kind = "call", size = 5):
         fid = str(MemoryToAddressLibrary(self.version, entryPoint))
         cid = str(MemoryToAddressLibrary(self.version, ref_address))
         ofid = GetMatchID(self.game_version, fid)
@@ -142,26 +158,28 @@ class AddressLibrary:
         ooffset = GetFunctionCallOffsets(pair[self.game_version],ofid, ocid, index)
         
 
-        if(self.game_version == "ae"):
-            print("__ ADDRESS AND OFFSET __")
-            print("SE ID: "+ GetPrettyNull(ofid)+ " SE Offset: " + GetPrettyNull(ooffset) + " (Heuristic)")
-            print("AE ID: "+ fid + " AE Offset: " + hex(ref_offset).rstrip('L'))
-        else:
-            print("__ ADDRESS AND OFFSET __")
-            print("SE ID: "+ fid + " SE Offset: " + hex(ref_offset).rstrip('L'))
-            print("AE ID: "+ GetPrettyNull(ofid) + " AE Offset: "+GetPrettyNull(ooffset) + " (Heuristic)")
+        # if(self.game_version == "ae"):
+        #     print("__ ADDRESS AND OFFSET __")
+        #     print("SE ID: "+ GetPrettyNull(ofid)+ " SE Offset: " + GetPrettyNull(ooffset) + " (Heuristic)")
+        #     print("AE ID: "+ fid + " AE Offset: " + hex(ref_offset).rstrip('L'))
+        # else:
+        #     print("__ ADDRESS AND OFFSET __")
+        #     print("SE ID: "+ fid + " SE Offset: " + hex(ref_offset).rstrip('L'))
+        #     print("AE ID: "+ GetPrettyNull(ofid) + " AE Offset: "+GetPrettyNull(ooffset) + " (Heuristic)")
         
+        instruction = "write_call" if kind == "call" else "write_branch"
+
         if(self.game_version == "ae"):
             print(
                 "SKSE::AllocTrampoline(14);\n"+
                 "auto& trampoline = SKSE::GetTrampoline();\n" + 
-                "originalFunction = trampoline.write_call<5>(REL::RelocationID("+ GetPrettyNull(ofid)+", "+ fid +").address() + REL::Relocate("+GetPrettyNull(ooffset)+", "+hex(ref_offset).rstrip('L')+"), thunk);"
+                "originalFunction = trampoline."+instruction+"<"+str(size)+">(REL::RelocationID("+ GetPrettyNull(ofid)+", "+ fid +").address() + REL::Relocate("+GetPrettyNull(ooffset)+", "+hex(ref_offset).rstrip('L')+"), thunk);"
             )
         else:
             print(
                 "SKSE::AllocTrampoline(14);\n"+
                 "auto& trampoline = SKSE::GetTrampoline();\n" + 
-                "originalFunction = trampoline.write_call<5>(REL::RelocationID("+ fid+", "+ GetPrettyNull(ofid) +").address() + REL::Relocate("+hex(ref_offset).rstrip('L')+", "+GetPrettyNull(ooffset)+"), thunk);"
+                "originalFunction = trampoline."+instruction+"<"+str(size)+">(REL::RelocationID("+ fid+", "+ GetPrettyNull(ofid) +").address() + REL::Relocate("+hex(ref_offset).rstrip('L')+", "+GetPrettyNull(ooffset)+"), thunk);"
             )
 
 
